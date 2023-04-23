@@ -1,16 +1,15 @@
 package com.pelgray.otus.logging;
 
 import com.pelgray.otus.logging.annotation.Log;
-import com.pelgray.otus.logging.test.TestLoggingInterface;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 public class LoggingInvocationHandler implements InvocationHandler {
-    private final TestLoggingInterface loggingClass;
+    private final Object targetObject;
 
-    public LoggingInvocationHandler(TestLoggingInterface loggingInterface) {
-        this.loggingClass = loggingInterface;
+    public LoggingInvocationHandler(Object targetObject) {
+        this.targetObject = targetObject;
     }
 
     @Override
@@ -27,11 +26,11 @@ public class LoggingInvocationHandler implements InvocationHandler {
             info.append("\n");
             System.out.println(info);
         }
-        return method.invoke(loggingClass, args);
+        return method.invoke(targetObject, args);
     }
 
     private boolean isLogEnabled(Method method) throws NoSuchMethodException {
-        return loggingClass.getClass()
+        return targetObject.getClass()
                 .getDeclaredMethod(method.getName(), method.getParameterTypes())
                 .isAnnotationPresent(Log.class);
     }
@@ -39,7 +38,7 @@ public class LoggingInvocationHandler implements InvocationHandler {
     @Override
     public String toString() {
         return "LoggingInvocationHandler{" +
-                "logging=" + loggingClass +
+                "targetObject=" + targetObject +
                 '}';
     }
 }
