@@ -4,6 +4,7 @@ import com.pelgray.otus.logging.annotation.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +13,15 @@ public class LoggingInvocationHandler implements InvocationHandler {
 
     private final Map<Method, LogInfo> cachedLogInfo = new HashMap<>();
 
-    public LoggingInvocationHandler(Object targetObject) {
+    private LoggingInvocationHandler(Object targetObject) {
         this.targetObject = targetObject;
+    }
+
+    @SuppressWarnings({"unchecked", "SameParameterValue"})
+    public static <T extends I, I> I getLoggedInstance(T targetObject, Class<I> interfaceClazz) {
+        var handler = new LoggingInvocationHandler(targetObject);
+        return (I) Proxy.newProxyInstance(LoggingInvocationHandler.class.getClassLoader(),
+                                          new Class<?>[]{interfaceClazz}, handler);
     }
 
     @Override
