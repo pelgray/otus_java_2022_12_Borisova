@@ -9,9 +9,9 @@ import java.util.List;
  * Ячейка банкомата
  */
 public class AtmCell {
-    Deque<Banknote> banknotes = new ArrayDeque<>();
+    private final Deque<Banknote> banknotes = new ArrayDeque<>();
 
-    public void add(Banknote banknote) {
+    public void put(Banknote banknote) {
         banknotes.push(banknote);
     }
 
@@ -19,7 +19,7 @@ public class AtmCell {
         return banknotes.size();
     }
 
-    public List<Banknote> get(int number) {
+    public List<Banknote> remove(int number) {
         var result = new ArrayList<Banknote>(number);
         for (int i = 0; i < number; i++) {
             result.add(banknotes.pop());
@@ -27,7 +27,7 @@ public class AtmCell {
         return result;
     }
 
-    public List<Banknote> getAll() {
+    public List<Banknote> removeAll() {
         var result = banknotes.stream().toList();
         banknotes.clear();
         return result;
