@@ -32,7 +32,7 @@ public class AtmCellsBlock {
             throw new IllegalCashException();
         }
         var cell = cells.get(banknote.getDenomination());
-        cell.add(banknote);
+        cell.put(banknote);
     }
 
     /**
@@ -46,7 +46,7 @@ public class AtmCellsBlock {
             var curCell = entry.getValue();
             if (amountLeft >= curDenomination && curCell.isNotEmpty()) {
                 var numOfBanknotes = amountLeft / curDenomination;
-                result.addAll(curCell.get(numOfBanknotes));
+                result.addAll(curCell.remove(numOfBanknotes));
                 amountLeft -= curDenomination * numOfBanknotes;
             }
             if (amountLeft == 0) {
@@ -62,7 +62,7 @@ public class AtmCellsBlock {
     public List<Banknote> getAll() {
         var result = new ArrayList<Banknote>();
         for (var cell : cells.values()) {
-            result.addAll(cell.getAll());
+            result.addAll(cell.removeAll());
         }
         return result;
     }
