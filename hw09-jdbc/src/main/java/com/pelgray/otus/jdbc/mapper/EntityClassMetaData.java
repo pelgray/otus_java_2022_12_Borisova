@@ -12,8 +12,9 @@ public interface EntityClassMetaData<T> {
 
     Constructor<T> getConstructor();
 
-    //Поле Id должно определять по наличию аннотации Id
-    //Аннотацию @Id надо сделать самостоятельно
+    /**
+     * Поле Id определяется по наличию аннотации @{@link com.pelgray.otus.jdbc.annotation.Id}
+     */
     Field getIdField();
 
     List<Field> getAllFields();

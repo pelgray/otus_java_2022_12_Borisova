@@ -1,8 +1,13 @@
 package ru.otus.crm.model;
 
+import com.pelgray.otus.jdbc.annotation.Id;
+
 public class Manager {
+    @Id
     private Long no;
+
     private String label;
+
     private String param1;
 
     public Manager() {

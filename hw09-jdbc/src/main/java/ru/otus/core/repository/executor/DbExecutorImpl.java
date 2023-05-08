@@ -24,7 +24,7 @@ public class DbExecutorImpl implements DbExecutor {
                 return rs.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new DataBaseOperationException("executeInsert error", ex);
+            throw new DataBaseOperationException("executeStatement error", ex);
         }
     }
 
