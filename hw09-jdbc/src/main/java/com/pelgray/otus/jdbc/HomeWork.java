@@ -2,7 +2,9 @@ package com.pelgray.otus.jdbc;
 
 import com.pelgray.otus.jdbc.mapper.DataTemplateJdbc;
 import com.pelgray.otus.jdbc.mapper.EntityClassMetaData;
+import com.pelgray.otus.jdbc.mapper.EntityClassMetaDataImpl;
 import com.pelgray.otus.jdbc.mapper.EntitySQLMetaData;
+import com.pelgray.otus.jdbc.mapper.EntitySQLMetaDataImpl;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +33,10 @@ public class HomeWork {
         var dbExecutor = new DbExecutorImpl();
 
 // Работа с клиентом
-        EntityClassMetaData entityClassMetaDataClient; // = new EntityClassMetaDataImpl();
-        EntitySQLMetaData entitySQLMetaDataClient = null; //= new EntitySQLMetaDataImpl(entityClassMetaDataClient);
-        var dataTemplateClient = new DataTemplateJdbc<Client>(dbExecutor, entitySQLMetaDataClient); //реализация DataTemplate, универсальная
+        EntityClassMetaData<Client> entityClassMetaDataClient = EntityClassMetaDataImpl.of(Client.class);
+        EntitySQLMetaData entitySQLMetaDataClient = new EntitySQLMetaDataImpl(entityClassMetaDataClient);
+        var dataTemplateClient = new DataTemplateJdbc<>(dbExecutor, entityClassMetaDataClient,
+                                                        entitySQLMetaDataClient); //реализация DataTemplate, универсальная
 
 // Код дальше должен остаться
         var dbServiceClient = new DbServiceClientImpl(transactionRunner, dataTemplateClient);
@@ -46,9 +49,10 @@ public class HomeWork {
 
 // Сделайте то же самое с классом Manager (для него надо сделать свою таблицу)
 
-        EntityClassMetaData entityClassMetaDataManager; // = new EntityClassMetaDataImpl();
-        EntitySQLMetaData entitySQLMetaDataManager = null; //= new EntitySQLMetaDataImpl(entityClassMetaDataManager);
-        var dataTemplateManager = new DataTemplateJdbc<Manager>(dbExecutor, entitySQLMetaDataManager);
+        EntityClassMetaData<Manager> entityClassMetaDataManager = EntityClassMetaDataImpl.of(Manager.class);
+        EntitySQLMetaData entitySQLMetaDataManager = new EntitySQLMetaDataImpl(entityClassMetaDataManager);
+        var dataTemplateManager = new DataTemplateJdbc<>(dbExecutor, entityClassMetaDataManager,
+                                                         entitySQLMetaDataManager);
 
         var dbServiceManager = new DbServiceManagerImpl(transactionRunner, dataTemplateManager);
         dbServiceManager.saveManager(new Manager("ManagerFirst"));
