@@ -27,15 +27,14 @@ public class ResourcesFileLoader implements Loader {
         if (fileName == null || fileName.isBlank()) {
             throw new FileProcessException("The input file must not be null or blank");
         }
-        var resource = ResourcesFileLoader.class.getClassLoader().getResourceAsStream(fileName);
-        if (resource == null) {
-            throw new FileProcessException("The input file could not be found in resources directory, "
-                                                   + "the input file is in a package that is not opened unconditionally, "
-                                                   + "or access to the input file is denied by the security manager.");
-        }
         var result = new ArrayList<Measurement>();
-        try (var is = resource) {
-            for (var node : objectMapper.readTree(is)) {
+        try (var resource = ResourcesFileLoader.class.getClassLoader().getResourceAsStream(fileName)) {
+            if (resource == null) {
+                throw new FileProcessException("The input file could not be found in resources directory, "
+                                                       + "the input file is in a package that is not opened unconditionally, "
+                                                       + "or access to the input file is denied by the security manager.");
+            }
+            for (var node : objectMapper.readTree(resource)) {
                 result.add(getMeasurement(node));
             }
         } catch (IOException e) {

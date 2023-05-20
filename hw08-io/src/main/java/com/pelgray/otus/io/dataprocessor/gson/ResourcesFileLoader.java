@@ -28,16 +28,17 @@ public class ResourcesFileLoader implements Loader {
         if (fileName == null || fileName.isBlank()) {
             throw new FileProcessException("The input file must not be null or blank");
         }
-        var resource = ResourcesFileLoader.class.getClassLoader().getResourceAsStream(fileName);
-        if (resource == null) {
-            throw new FileProcessException("The input file could not be found in resources directory, "
-                                                   + "the input file is in a package that is not opened unconditionally, "
-                                                   + "or access to the input file is denied by the security manager.");
-        }
         ArrayList<Measurement> result;
-        try (var reader = gson.newJsonReader(new InputStreamReader(resource))) {
-            result = gson.fromJson(reader, new TypeToken<ArrayList<Measurement>>() {
-            }.getType());
+        try (var resource = ResourcesFileLoader.class.getClassLoader().getResourceAsStream(fileName)) {
+            if (resource == null) {
+                throw new FileProcessException("The input file could not be found in resources directory, "
+                                                       + "the input file is in a package that is not opened unconditionally, "
+                                                       + "or access to the input file is denied by the security manager.");
+            }
+            try (var reader = gson.newJsonReader(new InputStreamReader(resource))) {
+                result = gson.fromJson(reader, new TypeToken<ArrayList<Measurement>>() {
+                }.getType());
+            }
         } catch (IOException e) {
             throw new FileProcessException(e);
         }
