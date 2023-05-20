@@ -4,7 +4,9 @@ import com.pelgray.otus.core.repository.DataTemplateHibernate;
 import com.pelgray.otus.core.repository.HibernateUtils;
 import com.pelgray.otus.core.sessionmanager.TransactionManagerHibernate;
 import com.pelgray.otus.crm.dbmigrations.MigrationsExecutorFlyway;
+import com.pelgray.otus.crm.model.Address;
 import com.pelgray.otus.crm.model.Client;
+import com.pelgray.otus.crm.model.Phone;
 import com.pelgray.otus.crm.service.DBServiceClient;
 import com.pelgray.otus.crm.service.DbServiceClientImpl;
 import com.pelgray.otus.demo.DbServiceDemo;
@@ -52,7 +54,7 @@ public abstract class AbstractHibernateTest {
         configuration.setProperty("hibernate.connection.username", dbUserName);
         configuration.setProperty("hibernate.connection.password", dbPassword);
 
-        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class);
+        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class, Address.class, Phone.class);
 
         transactionManager = new TransactionManagerHibernate(sessionFactory);
         clientTemplate = new DataTemplateHibernate<>(Client.class);
