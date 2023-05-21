@@ -1,13 +1,17 @@
+create sequence phone_SEQ start with 1 increment by 1;
+
 create table phone
 (
-    id   bigserial not null primary key,
+    id   bigint not null primary key,
     client_id bigint not null references client(id),
     number varchar(50)
 );
 
+create sequence address_SEQ start with 1 increment by 1;
+
 create table address
 (
-    id   bigserial not null primary key,
+    id   bigint not null primary key,
     street varchar(250)
 );
 
