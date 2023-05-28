@@ -10,9 +10,13 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@DisplayName("Демо работы с hibernate (с абстракциями) должно ")
-class DbServiceClientTest extends AbstractHibernateTest {
+@DisplayName("Версия DbServiceClientTest с кэшированием должна ")
+class CachedDbServiceClientTest extends AbstractHibernateTest {
 
     @Test
     @DisplayName(" корректно сохранять, изменять и загружать клиента")
@@ -47,5 +51,9 @@ class DbServiceClientTest extends AbstractHibernateTest {
         //then
         assertThat(clientList.size()).isEqualTo(1);
         assertThat(clientList.get(0)).usingRecursiveComparison().isEqualTo(loadedClient.get());
+
+        verify(transactionManager, times(2)).doInTransaction(any()); // save() x2
+        verify(transactionManager).doInReadOnlyTransaction(any()); // only first getClient()
+        verifyNoMoreInteractions(transactionManager);
     }
 }

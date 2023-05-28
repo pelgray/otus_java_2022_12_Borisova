@@ -1,5 +1,6 @@
 package com.pelgray.otus.demo;
 
+import com.pelgray.otus.cache.MyCache;
 import com.pelgray.otus.core.repository.DataTemplateHibernate;
 import com.pelgray.otus.core.repository.HibernateUtils;
 import com.pelgray.otus.core.sessionmanager.TransactionManagerHibernate;
@@ -7,7 +8,7 @@ import com.pelgray.otus.crm.dbmigrations.MigrationsExecutorFlyway;
 import com.pelgray.otus.crm.model.Address;
 import com.pelgray.otus.crm.model.Client;
 import com.pelgray.otus.crm.model.Phone;
-import com.pelgray.otus.crm.service.DbServiceClientImpl;
+import com.pelgray.otus.crm.service.CachedDbServiceClient;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class DbServiceDemo {
 ///
         var clientTemplate = new DataTemplateHibernate<>(Client.class);
 ///
-        var dbServiceClient = new DbServiceClientImpl(transactionManager, clientTemplate);
+        var dbServiceClient = new CachedDbServiceClient(transactionManager, clientTemplate, new MyCache<>(500));
         dbServiceClient.saveClient(new Client("dbServiceFirst"));
 
         var clientSecond = dbServiceClient.saveClient(new Client("dbServiceSecond"));

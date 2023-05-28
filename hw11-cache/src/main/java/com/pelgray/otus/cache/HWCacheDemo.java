@@ -11,7 +11,7 @@ public class HWCacheDemo {
     }
 
     private void demo() {
-        HwCache<String, Integer> cache = new MyCache<>();
+        HwCache<String, Integer> cache = new MyCache<>(500);
 
         // пример, когда Idea предлагает упростить код, при этом может появиться "спец"-эффект
         HwListener<String, Integer> listener = new HwListener<String, Integer>() {
